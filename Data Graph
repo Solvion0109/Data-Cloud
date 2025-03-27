@@ -1,0 +1,51 @@
+Notes 
+*****
+
+Overview
+---------
+When designing prompts in Prompt Builder or assigning skills in Skills Builder, it is crucial to ensure that Einstein has access to all necessary data. 
+This may involve multiple related data layers or data from various integrated sources.
+
+
+What Are Data Graphs?
+*********************
+Data Graph is Precomputed denormalised graph of DMOs/CIs derived  from related lakehouse tables , maintained  in near real time and queryable  for fast retrieval.
+Data Graphs in Data Cloud allow you to visualize and manage relationships between Data Model Objects (DMOs), similar to Schema Builder. 
+They enable:
+1. Tracing related fields.
+2. Rearranging relationships using drag-and-drop.
+3. Ensuring the correct field data is included in an AI application.
+
+How Data Graphs Work?
+********************
+Building a Data Graph:
+
+1. Start with a Primary DMO{only one}.
+2. Select objects and fields to include.
+3. Optionally add related objects(Max 9 related object we add), Data Cloud Segments, and Data Cloud Insights.
+
+
+Data Processing & Transformation:
+********************************
+
+Selected components are processed into a flattened, read-only data graph record.
+Used for decision-making, filtering, and personalization.
+
+DMO Categories:
+**************
+
+A Primary DMO can belong to any category except Engagement (Profile is the most common).
+Related DMOs can belong to Profile, Other, or Engagement categories.
+
+
+Final Data Graph Record:
+
+
+Transforms hierarchical relationships into a flattened, read-only record.
+
+
+Contains metadata (e.g., data space, data graph names).
+
+
+Stores primary DMO and related object data as a queryable JSON blob.
+
