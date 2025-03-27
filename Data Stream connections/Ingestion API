@@ -1,1 +1,107 @@
-Notes 
+Postman Setup Guide
+*******************
+
+Step 1: Install the Postman Application
+DISABLE ALL ORGS ON YOUR BROWSER AND LOG IN TO DATA CLOUD ORG AGAIN
+
+Step 2: Create a Private-Public Key Pair
+Prerequisites
+Download and install OpenSSL
+Generate Key Pair
+Run the following command in Terminal / Command Prompt and provide the required details:
+openssl req -x509 -sha256 -noenc -days 300 -newkey rsa:2048 -keyout salesforce.key -out salesforce.crt
+Save the Files
+After execution, the .key and .crt files will be generated and stored in:
+Windows: C:\Users\YourUser\
+Mac/Linux: /Users/YourUser/
+
+
+Step 3: Set Up a Connected App in Salesforce
+Steps
+Log in to Salesforce.
+Go to Setup → App Manager → New Connected App.
+Fill in the details:
+Connected App Name: DC API
+API Name: DC_API
+Contact Email: (Use a real email for recovery purposes.)
+Under API Settings:
+Enable OAuth Settings
+Set Callback URL: https://oauth.pstmn.io/v1/callback
+Enable Use Digital Signatures and upload salesforce.crt.
+Select the following OAuth scopes:
+
+ - Manage user data via APIs (api)
+- Perform requests at any time (refresh token, offline access)
+- Perform ANSI SQL queries on Salesforce Data Cloud data (cdp_query_api)
+- Manage Salesforce Data Cloud profile data (cdp_profile_api)
+- Manage Salesforce Data Cloud Ingestion API data (cdp_ingest_api)
+
+
+Deselect Require Proof Key for Code Exchange (PKCE).
+Click Save.
+
+Manage the Connected App
+Click Manage.
+Select Edit Policies.
+Under IP Relaxation, choose Relax IP Restrictions.
+Save changes and wait 10 minutes for the app to be ready.
+
+
+Step 4: Authorize the App
+Generate Authorization URL
+Replace placeholders in the following URL:
+https://YOUR_ORG_URL/services/oauth2/authorize?response_type=code&client_id=YOUR_CONSUMER_KEY&scope=api refresh_token offline_access cdp_profile_api cdp_query_api cdp_ingest_api&redirect_uri=https://oauth.pstmn.io/v1/callback
+
+YOUR_ORG_URL → Salesforce instance URL.
+YOUR_CONSUMER_KEY → Found in Connected App settings.
+Authorization Process
+Paste the URL into a browser and execute it.
+Click Allow.
+If prompted, click Open Postman.
+
+
+Step 5: Fork the Postman Collection
+Forking
+Open Salesforce Data Cloud Connect API Collection.
+Click Fork and add it to your workspace.
+
+
+Step 6: Configure Postman Collection Variables
+Update Variables
+Go to Postman and select Salesforce Data Cloud Connect APIs.
+Click on the Variables tab.
+Update the following variables:
+clientId → Found in Connected App settings.
+_dcTenantUrl → Retrieved from Data Cloud settings.
+_dcTenantToken → Generated during authentication.
+Save changes.
+
+
+Step 7: Authenticate in Postman
+Steps
+Set No Environment in Postman.
+Go to the Authorization tab.
+Set Scope:  api cdp_query_api cdp_profile_api full cdp_api cdp_ingest_api
+Ensure no orgs are logged in before authentication.
+Log in to Data Cloud Org.
+Comment out the script in Postman Collection.
+Click Get New Access Token.
+Approve and retrieve the access token.
+
+
+Step 8: Run the API Requests
+Running Ingestion API
+Navigate to Ingestion API → Insert Records → Streaming → Insert Records.
+Fill in:
+Red: apiName for the Ingestion API.
+Blue: Schema Object Name from Ingestion API.
+Fill the body using the YAML file uploaded to the Ingestion API Connector.
+Click Send.
+Expected Response
+Successful data ingestion response confirming the records were inserted.
+Final Notes
+This setup ensures proper authentication and connection to Salesforce Data Cloud APIs using Postman.
+Follow the steps carefully for seamless integration.
+
+
+
